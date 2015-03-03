@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+</head>
+<body style="width:100%">
+	<h1>Color Generator</h1>
+	<p>Objective: To generate a list of colors for projects</p>
+	<p>Usage: getColor(index); </p>
+	
+	<h3>Variables</h3>
+
+	<input id="center" value="100" placeholder="Center"/>
+	<input id="width" value="180" placeholder="Width"/>
+	<input id="redFrequency" value="100" placeholder="Red Frequency"/>
+	<input id="grnFrequency" value="100" placeholder="Green Frequency"/>
+	<input id="bluFrequency" value="100" placeholder="Blue Frequency"/>
+	<input id="phase1" value="100" placeholder="Phase 1"/>
+	<input id="phase2" value="100" placeholder="Phase 2"/>
+	<input id="phase3" value="100" placeholder="Phase 3"/>
+	<br/><br/>
+	<div id="element"></div>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
+<script type="text/javascript">
+	
+	//Play around with these numbers to get a different shades of colors
+	var center = 100;
+	var width = 180;
+	var redFrequency = 1.666;
+	var grnFrequency = 1.666;
+	var bluFrequency = 1.666;
+	var phase1 = 1;
+	var phase2 = 3;
+	var phase3 = 5;
+
+	$(document).on("ready", function() {
+		$("input").on("change", function() {
+			//center = $(this).val();
+			switch($(this).attr("id")) {
+				case "width":
+					width = $(this).val();
+					break;
+				case "center":
+					center = $(this).val();
+					break;
+				case "redFrequency":
+					redFrequency = $(this).val();
+					break;
+				case "grnFrequency":
+					grnFrequency = $(this).val();
+					break;
+				case "bluFrequency":
+					bluFrequency = $(this).val();
+					break;
+				case "phase1":
+					phase1 = $(this).val();
+					break;
+				case "phase2":
+					phase2 = $(this).val();
+					break;
+				case "phase3":
+					phase3 = $(this).val();
+					break;
+			}
+			start();
+		});
+	});
+
+	function RGB2Color(r,g,b)
+	{
+	    return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+	}
+
+	function byte2Hex(n)
+	{
+	    var nybHexString = "0123456789ABCDEF";
+	    return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1);
+	}
+
+	function getColor(index)
+	{
+		
+	    var red = Math.sin(redFrequency*index + phase1) * width + center;
+	    var grn = Math.sin(grnFrequency*index + phase2) * width + center;
+	    var blu = Math.sin(bluFrequency*index + phase3) * width + center;
+	    return RGB2Color(red,grn,blu);
+	}
+
+
+	//Code to generate a list of colors
+	var index = 0;
+	var maxColors = 100;
+	var job;
+
+	function start() {
+		$("#element").html("");
+		index = 0;
+	    job = setInterval(function(){
+	        var colorTest = getColor(index);
+	        var string = "<p style='background:"+colorTest+";height:50px;width:50px;float:left;margin:5px'></p>";
+			$("#element").append(string);
+	        index++;
+			if(index==maxColors){
+				clearInterval(job);
+			}
+	    },1);
+	}
+
+	start();
+
+</script>
+	</body>
+</html>
